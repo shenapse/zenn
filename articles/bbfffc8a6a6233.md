@@ -1,5 +1,5 @@
 ---
-title: "自炊PDF本に目次を付与する汎用的"
+title: "自炊PDF本に短時間で詳細な目次を付与するツール"
 emoji: "📚"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["python"]
@@ -17,6 +17,7 @@ published: false
     - [re-numbering: ページ番号調整](#re-numbering-ページ番号調整)
     - [2ymltoc: yaml 形式へ整形](#2ymltoc-yaml-形式へ整形)
 - [まとめ](#まとめ)
+- [参考文献](#参考文献)
 
 ## 概要
 
@@ -321,3 +322,9 @@ pdftoc /path/to/線形代数の世界.pdf
 - そのデータファイルは, 本の目次の画像ファイルからスタートして, ツールのバケツリレーで生成することができる
 - このバケツリレーを利用しつつ, 最終的に pdftoc-rs 以外のツール T で目次付与したい場合は, tidy なテキストファイルを受け取って, T が想定するフォーマットに整形するツールを書けばよい
 - 【おまけ再掲】理工系書籍の目次データなら, [toc-data-storage](https://github.com/Shena4746/toc-data-storage) を探すと見つかるかもしれない
+
+## 参考文献
+
+- [PDFに目次を追加する](https://osanshouo.github.io/blog/2021/05/04-pdf-toc/)
+- [PDFに目次を追加する - PDFtk](https://osanshouo.github.io/blog/2021/05/04-pdf-toc/)
+- [booky - PDFtk](https://github.com/SiddharthPant/booky)
