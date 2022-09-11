@@ -1,3 +1,3 @@
-# Zenn CLI
+# Zenn CLI を使った記事管理用
 
-* [📘 How to use](https://zenn.dev/zenn/articles/zenn-cli-guide)
+[自炊PDF本に目次を付与するツールについての記事](https://zenn.dev/articles/bbfffc8a6a6233/)
