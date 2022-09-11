@@ -125,7 +125,7 @@ tidy-toc はこのようなテキストファイルを作ることを目的に�
 
 実際にどう使うのかを例示するために, 一冊分の目次データファイルを目次画像から生成する過程を以下に書く. 各ツールの詳細は, それぞれの README.md や `(ツール名) --help` を参照.
 
-サンプルは, [東大出版の「線形代数の世界」](http://www.utp.or.jp/book/b305671.html)とする. この本の目次PDFは[こちら](/images/la.pdf).
+サンプルは, [東大出版の「線形代数の世界」](http://www.utp.or.jp/book/b305671.html)とする. この本の目次PDFは[こちら](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la.pdf).
 
 :::message
 本番では画像ファイルを束ねた zip を推奨. PDFと違って画像への変換作業が無い分, 処理が高速で, API のファイル容量制限に引っかかる可能性が低い.
@@ -133,7 +133,7 @@ tidy-toc はこのようなテキストファイルを作ることを目的に�
 
 ### 目次画像の OCR
 
-日本語のファイルなので, [ocr-japanese-doc-by-line](https://github.com/Shena4746/ocr-japanese-doc-by-line) で OCR する. インストール済だと仮定する. 以下のコマンドで `your-directory` に OCR 結果 [la_ocred.txt](/images/la_ocred.txt) が出力される.
+日本語のファイルなので, [ocr-japanese-doc-by-line](https://github.com/Shena4746/ocr-japanese-doc-by-line) で OCR する. インストール済だと仮定する. 以下のコマンドで `your-directory` に OCR 結果 [la_ocred.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred.txt) が出力される.
 
 ```bash: bash
 # ocr by ocr-gcv.py
