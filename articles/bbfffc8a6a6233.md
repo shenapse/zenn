@@ -3,7 +3,7 @@ title: "自炊PDF本に短時間で詳細な目次を付与するツール"
 emoji: "📚"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["python"]
-published: false
+published: True
 ---
 
 - [概要](#概要)
