@@ -32,7 +32,7 @@ published: True
 という入出力形式を取る. このうち, データファイルを準備するための汎用性があり, かつ, 手入力よりも有意に効率的な手法は, 私の知る限り全く整備されていない. というわけで, それっぽいツールを作った.
 
 以下は, データファイル生成プロセス. 1つのツールが, 1つの矢印に当たるデータ加工を行う.
-![](/images/graph_process.png)
+![](/images/toc-tools/graph_process.png)
 
 ## 関連ツール(参考)
 
@@ -125,7 +125,7 @@ tidy-toc はこのようなテキストファイルを作ることを目的に�
 
 実際にどう使うのかを例示するために, 一冊分の目次データファイルを目次画像から生成する過程を以下に書く. 各ツールの詳細は, それぞれの README.md や `(ツール名) --help` を参照.
 
-サンプルは, [東大出版の「線形代数の世界」](http://www.utp.or.jp/book/b305671.html)とする. この本の目次PDFは[こちら](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la.pdf).
+サンプルは, [東大出版の「線形代数の世界」](http://www.utp.or.jp/book/b305671.html)とする. この本の目次PDFは[こちら](images/toc-tools/la.pdf).
 
 :::message
 本番では画像ファイルを束ねた zip を推奨. PDFと違って画像への変換作業が無い分, 処理が高速で, API のファイル容量制限に引っかかる可能性が低い.
@@ -133,7 +133,7 @@ tidy-toc はこのようなテキストファイルを作ることを目的に�
 
 ### 目次画像の OCR
 
-日本語のファイルなので, [ocr-japanese-doc-by-line](https://github.com/Shena4746/ocr-japanese-doc-by-line) で OCR する. インストール済だと仮定する. 以下のコマンドで `your-directory` に OCR 結果 [la_ocred.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred.txt) が出力される.
+日本語のファイルなので, [ocr-japanese-doc-by-line](https://github.com/Shena4746/ocr-japanese-doc-by-line) で OCR する. インストール済だと仮定する. 以下のコマンドで `your-directory` に OCR 結果 [la_ocred.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/toc-tools/la_ocred.txt) が出力される.
 
 ```bash: bash
 # ocr by ocr-gcv.py
@@ -192,9 +192,9 @@ tidy-toc /path/to/la_ocred.txt -mpcas --ja
 
 対話的にクリーニングしている様子. 今回のサンプルでは, 運良く `--merge` は不要だったようだ.
 
-![](/images/demo/demo_tidy.gif)
+![](/images/toc-tools/demo/demo_tidy.gif)
 
-オプションで名前を指定しないと, `(元のファイル名_cleaned).txt` というファイルが出力される. 今回の出力結果は [la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned.txt).
+オプションで名前を指定しないと, `(元のファイル名_cleaned).txt` というファイルが出力される. 今回の出力結果は [la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned.txt).
 
 ```txt: head of la_ocred_cleaned.txt
 目次
@@ -213,7 +213,7 @@ tidy-toc /path/to/la_ocred.txt -mpcas --ja
 
 ### re-numbering: ページ番号調整
 
-[la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned.txt) の各行に書かれているページ番号は, 紙の本の目次にある数字を丸コピしただけで, 自炊PDF本における実際のページ位置を示しているわけではない.
+[la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned.txt) の各行に書かれているページ番号は, 紙の本の目次にある数字を丸コピしただけで, 自炊PDF本における実際のページ位置を示しているわけではない.
 実際のページ番号は, 一般に, 表紙や前付け, スキャン時の白紙スキップなどによって, 丸コピ数字からはズレる. この工程では, そのズレを解消する.
 
 全節(1.1~8.4)のページ番号の整合性を確認するのは大変なので, 現実解として, 各章のページ番号を比較することにする. これは, 全ページの整合性を担保する方法ではないものの, 誤差はあっても±1ページに収まることがほとんどで, 十分に実用的.
@@ -231,7 +231,7 @@ tidy-toc /path/to/la_ocred.txt -mpcas --ja
 第8章 テンソル積と外積 214
 ```
 
-他方で, [la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned.txt) のページ番号は以下のようになっている.
+他方で, [la_ocred_cleaned.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned.txt) のページ番号は以下のようになっている.
 
 ```txt: page numbers written in la_ocred_cleaned.txt
 第1章線形空間 1
@@ -244,7 +244,7 @@ tidy-toc /path/to/la_ocred.txt -mpcas --ja
 第8章 テンソル積と外積 207
 ```
 
-つまり, テキストファイルは, 一律-7ページ分ズレている. であれば, 第1章先頭以降のページ番号に一律で7を足せばよい. re-numbering を使ってそれを行うには, 以下のようにテキストファイルを編集すればよい: [la_ocred_cleaned_marked.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned_marked.txt)
+つまり, テキストファイルは, 一律-7ページ分ズレている. であれば, 第1章先頭以降のページ番号に一律で7を足せばよい. re-numbering を使ってそれを行うには, 以下のようにテキストファイルを編集すればよい: [la_ocred_cleaned_marked.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned_marked.txt)
 
 ```diff txt:la_ocr_cleaned_marked.txt
 目次
@@ -257,7 +257,7 @@ tidy-toc /path/to/la_ocred.txt -mpcas --ja
 ```
 
 これを以下のコマンドによってスクリプトに食わせると, ページ番号がスライドされたテキストファイルが出力される:
-[la_ocred_cleaned_marked_renumbered.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned_marked_renumbered.txt)
+[la_ocred_cleaned_marked_renumbered.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned_marked_renumbered.txt)
 
 ```bash
 re-numbering /path/to/la_ocred_cleaned_marked.txt -m
@@ -269,7 +269,7 @@ re-numbering /path/to/la_ocred_cleaned_marked.txt -m
 
 `-m` オプションをつけると, ページ番号をアラビア数字で振っていない行(処理されずに無視される)を `行番号 | 内容` の形式で指摘してくれる.
 それによると, 前付けのページが該当している. その行は, 番号を手打ちするか, または行ごと削除する必要がある. (正確には, 使用する目次付与ツールが, ページ番号未指定の入力を許容するか否かの問題だが, 危なっかしいので未指定は避けたい.) このサンプルでは削除することにした:
-[la_ocred_cleaned_marked_renumbered2.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned_marked_renumbered2.txt).
+[la_ocred_cleaned_marked_renumbered2.txt](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned_marked_renumbered2.txt).
 
 これで, 手元のPDFの目次情報が記載された, tidy なテキストファイルが出来上がった.
 
@@ -281,11 +281,11 @@ re-numbering /path/to/la_ocred_cleaned_marked.txt -m
 ymltoc /path/to/la_ocred_cleaned_marked_renumbered2 --ja
 ```
 
-![](/images/demo/demo_ymltoc.gif)
+![](/images/toc-tools/demo/demo_ymltoc.gif)
 
 階層構造を持たせる見出しの形式と, 階層の深さを尋ねられるので, 好きなように答える.
 ここでは, `第 X 章` を第0階層とした. すると, `第 X 章`の後に現れる各行が自動的にネストされて(i.e., 第`${0+1}`階層として)出力される. 最後に奥付の位置を尋ねられたのは, この理屈で奥付が章の配下にネストされることを防ぐためだ.
-かくして, めでたく目的の目次付与用のデータファイルが完成した.[la_ocred_cleaned_marked_renumbered2.yaml](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/la_ocred_cleaned_marked_renumbered2.yaml).
+かくして, めでたく目的の目次付与用のデータファイルが完成した.[la_ocred_cleaned_marked_renumbered2.yaml](https://github.com/Shena4746/introduce-toc-tools/blob/main/images/toc-tools/la_ocred_cleaned_marked_renumbered2.yaml).
 
 ```yml:la_ocred_cleaned_marked_renumbered2.yaml
 - 第1章線形空間 8
