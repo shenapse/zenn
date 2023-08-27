@@ -240,8 +240,8 @@ endglobal
 [hsnip-ext]:<https://marketplace.visualstudio.com/items?itemName=draivin.hsnips>
 [page-snippets-in-vscode]:https://code.visualstudio.com/docs/editor/userdefinedsnippets
 [shena-snippets]:https://github.com/Shena4746/latex-snippets-for-vscode
-[cheatsheet]:https://github.com/Shena4746/latex-snippets-for-vscode/blob/main/cheatsheet.md
-[snippets-doc]:https://github.com/Shena4746/latex-snippets-for-vscode/blob/main/snippets-reference.md
+[cheatsheet]:https://shena4746.github.io/latex-snippets-for-vscode/cheatsheet/cheatsheet.html
+[snippets-doc]:https://shena4746.github.io/latex-snippets-for-vscode/reference/snippets-reference.html
 [my-hsnips]:https://github.com/Shena4746/latex-snippets-for-vscode/blob/main/.vscode/latex.hsnips
 [demo-continuity]:/images/latex-snippets/demo-continuity.gif
 [demo-dual-basis]:/images/latex-snippets/demo-dual-basis.gif
