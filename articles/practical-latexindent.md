@@ -2,40 +2,35 @@
 title: "latexindentの実践的な使い方&設定例"
 emoji: "🌊"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
-published: false
+topics: ["latex", "Perl", "正規表現"]
+published: true
 ---
 
-## まとめ
+## 忙しい人向けのまとめ
 
-- 書け
+- latexindent で真っ先にいじった方がよい箇所は `lookForAlignDelims`, `oneSentencePerLine`, `Poly-switches`, `Replacements` の4つ
+- その4つをいじるだけでデモでやっているような数式環境に対する実用的な format ができるようになる
+- 手っ取り早く設定を丸パクリしたいなら[私のGitHub][GitHub my-template-texlive]においてある `.latexindent.yaml`をコピると近いものが手に入る
 
-## この記事の位置づけ・特徴
+## 前置き
 
-最初に, latexindent というツールそれ自体について一点だけ指摘しておくべきことがある.
-**latexindent はデフォルト設定ではほとんど仕事をしないツールである** ということだ.
-python でいう black のような, インストールして IDE と紐づければ後は勝手に仕事をしてくれるタイプの formatter ではない.
-実際, 多くの機能はデフォルトではオフになっている. latexindent 導入の山場は, 必要な Perl モジュールのインストールではなく(あれも面倒なことは認める), 自分用の設定を書くパートにある.
-有り難いことに(?), latexindent の設定項目は膨大であり, となるとやはり公式ドキュメントもそれなりのボリュームがある. それにも関わらず, 日本語の解説が非常に少ないため, ライトユーザーには厳しい状況のように思える(2023年執筆時点).
+**latexindent はデフォルト設定ではほとんど仕事をしない.** python でいう black のような, インストールして IDE と紐づければ後は勝手に仕事をしてくれるタイプの formatter ではない. 実際, 多くの機能はデフォルトではオフになっている. latexindent 導入の山場は, 必要な Perl モジュールのインストールではなく(あれも面倒なことは認める), 自分用の設定を書くパートにある. 有り難いことに(?), latexindent の設定項目は膨大であり, となるとやはり公式ドキュメントもそれなりのボリュームがある. それにも関わらず, 日本語の解説が非常に少ないため, ライトユーザーには厳しい状況のように思える(2023年執筆時点).
 
-この記事は, その latexindent の使い方に関する日本語の解説記事を意図して書いた. ただし, 入門的というよりはかなり実践的な内容になっている.
-[latexindent の使い方][How to use latexindent] とかで入門的な知識を仕入れた人が次に読むとだいたい分かる, くらいのレベルのはず.
-(なお, これを書いている人間のバックグラウンドは数学なので, 紹介する内容もその方面に偏っている.)
-"実践的"の意味するところは, ツールを現実に使う際の応用重視, というニュアンスだと思ってもらえば大体合っている.
-したがって, 全くの初学者に対して優しい記事である保証はない.
-また, 取り上げる話題は, 相対的に少ない労力で多くの利益が見込めるであろうものに限定しているから包括的でもない.
+この記事は, その latexindent の使い方・設定に関する日本語の解説記事を意図して書いた. ただし, 入門的というよりはかなり実践的な内容になっている. [latexindent の使い方][How to use latexindent] とかで入門的な知識を仕入れた人が次に読むとだいたい分かる, くらいのレベルのはず. (なお, これを書いている人間のバックグラウンドは数学なので, 紹介する内容もその方面に偏っている.)
+
+"実践的"の意味するところは, ツールを現実に使う際の応用重視, というニュアンスだと思ってもらえば大体合っている. 教科書的な説明は良くも悪くも少ない. また, 取り上げる話題は, 相対的に少ない労力で多くのリターンが期待できるものに限定しているから包括的でもない.
 
 ## デモ
 
-この記事で紹介する適当な設定を行ったときに, latexindent がどの程度仕事をしてくれるのかを以下のデモで示す.
-それを見て興味が湧かなければ, その時点でブラウザバック&サヨナラで構わない.
-実際, デモに出てくる以上のことはこの記事では解説されないので.
+この記事で紹介する適当な設定を行ったときに, latexindent がどの程度仕事をしてくれるのかを以下のデモで示す. それを見て興味が湧かなければ, その時点でブラウザバック&サヨナラで構わない. 実際, デモに出てくる以上のことはこの記事では解説されないので.
+
+デモの実行環境は, [私のGitHub][GitHub my-template-texlive] にあるVSCode用のTeXLive-Dockerイメージを使っている. latexindent の設定ファイル `.latexindent.yaml` もそこにある.
 
 ### デモ1
 
 ![demo-format-ctn][demo-format-ctn]
 
-見やすさのために勝手に所々で改行を入れた. その箇所は `\linebreak` で明記してある.
+見やすさのために所々に改行を入れた. その箇所は `\linebreak` で明記してある.
 
 ```tex
 # before
@@ -125,6 +120,8 @@ if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 
 環境構築についてはほとんど書かない. latexindent の導入自体は済んでいると想定する.
 latexindent 自体の予備知識としては, [latexindent の使い方][How to use latexindent] の "Example of settings for latexindent" の手前までを読んで理解しているものとする. 自信のない人は上の記事は全て読むことを勧める. 本記事とは見解の異なる部分もあるが, その違いも含めて有益だと思う.
+
+また, Replacements について深く理解したいなら正規表現と入門レベルの Perl の知識があるとよい.
 
 上の記事と重複する部分もあるが, 設定ファイルの扱い方についてだけは重要項目を例示列挙しておく.
 
@@ -518,6 +515,8 @@ before env \begin{env} body \end{env} after env
 
 `2`, `3` は `before env` の末尾に改行があるか否かで挙動が変わるという意味で, 繊細な所がある. より強制力の強い他の番号の使用を勧めたい.
 
+一般則を定める `environments` においては, これら4項目は, `0 or 1` が安全だろう. 特に `BodyStartsOnOwnLine: 3 or 4` はコンパイルエラーとなる環境があることは指摘しておくべきだろう(代表例は`equation`). その上で個別環境については, その環境の用途に応じて, 一般則を上書きすることも有り得る.
+
 ##### Poly-switches for double back slash (DBS)
 
 実は, `environments` に対しては, 上の4項目に加えて `DBSStartsOnOwnLine` と `DBSFinishesWithLineBreak` という項目もある. これはなぜか `defaultSettings.yaml` には書かれていないようだが, 公式ドキュメントには記載がある. これらは `0` or `1` or `2` の値を取り, 意味は上述のものと同じ.
@@ -525,6 +524,9 @@ before env \begin{env} body \end{env} after env
 これらの DBS 系の項目を特定の環境 `env` に効かせるためには, `lookForAlignDelims` に `env` が登録されていなければならない.
 たとえば, `equation` 環境に対して `DBSFinishesWithLineBreak` を設定したいなら, `lookForAlignDelims` に `equation` 環境を明記する必要がある.
 なぜなら, `equation` 環境は元々 `lookForAlignDelims` の中にはいないからだ.
+
+2つの `DBS...` のどちらかだけを `1` にするのが基本で, どちらを選ぶかは趣味の問題.
+`DBSStartsOnOwnLine: 1` とした場合は, `lookForAlignDelims` の中の `alignContentAfterDoubleBackSlash` なども追加の調整項目として挙がるだろう.
 
 #### 設定例
 
@@ -680,28 +682,196 @@ environments:
             EndFinishesWithLineBreak: 1     # -1,0,1,2,3,4
 ```
 
-2つの `DBS...` のどちらを `1` にするかは趣味の問題だろう.
-他の4項目は, 全て `1` にするのが基本だと思う.
 私は, `equation` と `gather` 環境についてだけは, `BeginStartsOnOwnLine: 4` として, 同環境とその前の文章を視覚的に見分けやすいようにしている. 同じ理由で `EndFinishesWithLineBreak: 4` としたいが, 上述の副作用を嫌って不採用としている.
 
 ### Replacements
 
+その名の通り, 置換を行う項目. latexindent に `-r` オプションを与えることで実行される.
 公式ドキュメントの該当箇所: [7. The -r, -rv and -rr switches][replacements].
 
-```yaml
-# example from official doc 
+#### 設定概要
+
+`defaultSettings.yaml` には次のような非常に単純な文字列置換が例示されているが, あまり使い所がないので, この単純版についてはスルーする.
+
+```yaml:defaultSettings.yaml
 replacements:
   -
-    substitution: s/\h+/ /sg
+    this: latexindent.pl
+    that: pl.latexindent
+    lookForThis: 0
+    when: before
+```
+
+ここで取り上げるのは, 正規表現を用いた文字列置換. 以下の形式で書く.
+正規表現のワンライナーでもよし, 正規表現で文字列を受けた後に Perl コードを書いてもよし.
+
+```yaml
+replacements:
+  -
+    substitution: s/\h+/ /sg    # Regular Expression with replacement
+    lookForThis: 1              # whether to run this
+    when: after                 # run before/after indentation
+  - 
+    substitution: |-                     # with Perl code
+      s/(?<=\\\()\h*(.*?)\h*(?=\\\))/    # Regular Expression must be here
+        my $body = $1;
+        process $body as you like...
+        $body/sxge;
     lookForThis: 1
     when: after
 ```
 
-#### 設定概要
+ちなみに, Perl コードを書けることは公式ドキュメント等では書かれていない. latexindent 開発者が Stack Exchange で Perl コードを含めた例を回答していたのを見て, 取り入れた.
+
+#### 注意事項・限界
+
+##### 注意事項
+
+`Replacements` はプリアンブルと `\begin{document}` 以降の区別なく, ファイル内の全テキストに対して効く. コメントに対しても効く. したがって, 適用範囲を意識的に絞らないと, 意図しない置換やコンフリクトが起こりやすい. というか必ず起こると思った方がよい. 私の勧める対処法としては, tex ファイルを,
+
+- プリアンブル
+- `document` 環境
+  - 別行数式環境(`equation`等)
+  - インライン数式環境
+  - (Optional)`%`含むコメント環境
+  - その他のテキスト
+
+と区分けして, それぞれの範囲にだけ効く置換ルールを定義すること. 冒頭で例に挙げた `s/\h+/ /sg` のようなファイル全体に渡って効く置換ルールはアンチパターンとすべきだと思う.
+
+たとえば, 数式環境に限定せずにマイナス記号 `-` の周囲に space を差し込むような置換ルールは `\usepackage{tikz-cd}` や, "Hahn-Banach"等にも効いてしまう.
+
+数式以外を対象とした置換ルールであったとしても, その適用範囲は広くても `document` 環境かプリアンブルのどちらかに限定した方がよい. 欲を言えば, プリアンブルを対象とする置換ルールは sty ファイルに対するルールとして, tex ファイルに対する置換ルールとは隔離した方がよい. つまり, 対象ファイルの拡張子ごとに異なる設定ファイルで管理した方がよい.
+
+##### 限界
+
+Perl の文法全てがサポートされているわけではないらしい. 私が知る例としては, `if($body =~ regexp)` が動かなかった. また, モジュールを呼び出したり, 同じファイルの他所で定義した関数を呼び出すこともできない.
+
+これらの事実と前述の注意事項の内容を踏まえると, latexindent の `Replacements` の枠組み内で頑張ってコードを書くメリットはお世辞にも多くはない. 簡易な正規表現以上のものが欲しくなったら, 他言語で専用のものを書く(あるいは有り物を探す)方に舵を切った方が良いだろう.
+
+以下では, それなりに実用性のある簡易なもの紹介する.
 
 #### 設定例
 
-### Further Readings
+##### `document` 環境内に作用するもの
+
+```yaml
+substitution: |-
+    s/(?<=\\begin\{document\})(.*?)(?=\\end\{document\})/
+    my $body = $1;
+# Condense consecutive white spaces into one
+    $body =~ s@\h{2,}@ @g;
+# Remove leading and trailing white spaces in braces "{}"
+    $body =~ s@\{\h*(.*?)\h*\}@\{$1\}@g;
+# Insert half-width space at every end of brace if it is followed by a command or a character
+    $body =~ s@(?<=\)|\}|])(\\?[0-9a-zA-Z])@ $1@g;
+# Remove space before comma and punctuation
+    $body =~ s@\h*([,\.])@$1@g;
+# Add space before "\" (excluding \left\rvert)
+    $body =~ s@(?<=\w|\})\\(?![rl]([Vv]ert))@ \\@g;
+    $body;/sxge;
+lookForThis: 1
+when: before
+```
+
+一度 `\begin{document}` と `\end{document}` の間も文字列を抽出してから, 改めて目的の置換(たとえば, brace`{}` 内の始まりと終わりの space を削除する)を順に適用している. (1, 2行目を変更しないなら)置換ルールの変更や追加は `$body =~` を変更したり新たに書き足したりすればよい. これは以下の例でも同様.
+
+##### 数式環境外の文字列に作用するもの
+
+```yaml
+substitution: |- # text env is intended to be document env minus math env
+    s/(?<=\\begin\{document\}|\\\)|\\end\{equation\}|\\end\{equation\*\}|\\end\{gather\}|\\end\{gather\*\})(.*?)(?=\\end\{document\}|\\\(|\\begin\{equation\}|\\begin\{equation\*\}|\\begin\{gather\}|\\begin\{gather\*\})/
+    my $body = $1;
+# Condense consecutive blank lines into one
+    $body =~ s@(?:\h*\n\h*){2,}\n@\n\n@g;
+    $body;/sxge;
+lookForThis: 1
+when: before
+```
+
+数式環境達の間にある文字列を抜き出しているだけなので, プリアンブルに数式環境を複数書くと意図しない動作をする場合がある.
+また, インライン数式環境は `\( \)` だけしか定義に入れていないし, `\[ \]`も含まれていない.
+
+#### インライン数式環境に作用するもの
+
+```yaml
+substitution: |-
+    s/(?<=\\\()\h*(.*?)\h*(?=\\\))/
+    my $body = $1;
+# Insert space at the beginning&end of inline math env
+# \(x\) -> \( x \)
+    $body = " ". $body . " ";
+# Add braces to superscripts and subscripts
+    $body =~ s@(\^|\_)([a-zA-Z0-9]+)@$1\{$2\}@g;
+# Add a single space around + - = * /
+    $body =~ s@\h*(?<![\{:])([\+\-=\/\*])(?![\}:])\h*@ $1 @g;
+# Add space around <>
+    $body =~ s@(?<!\\left|\\right)\h*(<|>)\h*(?!\\left|\\right)@ $1 @g;
+    $body;/sxge
+lookForThis: 1
+when: after
+```
+
+例のごとく, インライン数式環境は `\( \)` だけしか定義に入れていない点に注意.
+`Replacements` がプリアンブルやコメント等にも走ってしまうことを考慮すると `$` インライン数式環境を適切にカバーするのは面倒.
+
+##### 行別数式環境に作用するもの
+
+```yaml
+substitution: |-
+    s/(\\begin\{(?:equation|gather)\*?\}[\h\n]*)(?<!\n)(.*?)(?!\h)([\h\n]*\\end\{(?:equation|gather)\*?\}[\h\n]*)/
+    my ($begin, $body, $end) = ($1, $2, $3);
+# name of environment that can come into equation or gather.
+    my @envs = ("aligned","cases");
+# choose only envs that are present in the body
+        @envs = grep { contain_env($_, $body) } @envs;
+# function to cut \begin\end in body and paste in $be and $en 
+    sub process_gather {
+        my ($b, $c, $e, $be, $en) = @_;
+        $$be .= $b;
+        $$en = $e.$$en;
+        return $c;
+    }
+# function to test if body contains \begin{env*?} statement
+    sub contain_env {
+        my ($env, $body) = @_;
+        return index($body, "\\begin\{".$env) != -1;
+    }
+# recursively cut out \begin and \end from body and add them to $begin and $end
+    while (1){
+        foreach my $env (@envs){
+            if (contain_env($env, $body)){ 
+                $body =~ s@([\h\n]*?\\begin\{$env\*?\}[\h\n]*)(?<!\n)(.*?)(?!\h)([\h\n]*\\end\{$env\*?\}[\h\n]*)@process_gather($1, $2, $3, \$begin, \$end)@egxs;
+                next;
+            }
+        }
+        last;
+    }
+# add space around operators +-=/* if they are not paired with &
+    $body =~ s@\h*(?<![&\{:])([\+\-=\/\*])(?![\:}&])\h*@ $1 @g;
+# Add braces to superscripts and subscripts
+    $body =~ s@(\^|\_)([a-zA-Z0-9]+)@$1\{$2\}@g;
+# add space around <>
+    $body =~ s@(?<!\\left|\\right)\h*(<|>)\h*(?!\\left|\\right)@ $1 @g;
+# add space after \leftxxx
+    $body =~ s@(\\left(?:\(|\[|\\\{|\.|\\l))\h*@$1 @g;
+# remove blank line (this is mostly done by modifyLineBreaks)
+    $body =~ s@(?:\h*\n\h*){2,}@\n@g;
+    $begin . $body . $end /sxge;
+lookForThis: 1
+when: before
+```
+
+以下のように複数環境がネストされている場合が有り得るので, コアにある `1+1=2` を抜き出す前処理(~`while`文まで)がある.
+
+```tex
+\begin{equation}
+    \begin{aligned}
+        1+1=2
+    \end{aligned}
+\end{equation}
+```
+
+プリアンブルだろうが, コメントアウトされていようが, 全ての `equation` 環境が影響を受ける点に注意.
 
 ## 参考文献
 
