@@ -6,6 +6,10 @@ topics: []
 published: false
 ---
 
+## まとめ
+
+- 書け
+
 ## この記事の位置づけ・特徴
 
 最初に, latexindent というツールそれ自体について一点だけ指摘しておくべきことがある.
@@ -31,15 +35,21 @@ python でいう black のような, インストールして IDE と紐づけ�
 
 ![demo-format-ctn][demo-format-ctn]
 
-```
+見やすさのために勝手に所々で改行を入れた. その箇所は `\linebreak` で明記してある.
+
+```tex
 # before
-Let \(U\) be an open subset of\(\mathbb{R}    \). A function \(f:U \to \mathbb{R}\)is said to be \textit{continuous at}\( x_0\)if for any\(\epsilon>0 \)there is\( \delta>0\) such that\begin{equation}\abs{x-x_0}\implies\abs{f(x)-f(x_0)}<\epsilon.\end{equation}
+Let \(U\) be an open subset of\(\mathbb{R}    \).\linebreak
+A function \(f:U \to \mathbb{R}\)is said to be \textit{continuous at}\( x_0\)\linebreak
+if for any\(\epsilon>0 \)there is\( \delta>0\)\linebreak
+such that\begin{equation}\abs{x-x_0}\implies\abs{f(x)-f(x_0)}<\epsilon.\end{equation}
 ```
 
-```
+```tex
 # after
 Let \( U \) be an open subset of \( \mathbb{R} \).
-A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0} \) if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
+A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0} \)\linebreak
+if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 
 \begin{equation}
     \abs{x - x_{0}} \implies \abs{f(x) - f(x_{0})} < \epsilon.
@@ -59,12 +69,16 @@ A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0
 
 ![demo-format-card][demo-format-card]
 
-```
+```tex
 # before
-\begin{equation}\begin{aligned}\func{\mathbb{Z}_{+}}{\mathbb{Z}_{+}}\\&\hookrightarrow \func{\mathbb{Z}_{+}}{\mathcal{P}(\mathbb{Z}_{+})}\\&\sim\func{\mathbb{Z}_{+}}{\func{\mathbb{Z}_{+}}{\Set{0,1}}}\\&\sim\func{\mathbb{Z}_{+}\times\mathbb{Z}_{+}}{\Set{0,1}}\\&\sim\func{\mathbb{Z}_{+}}{\Set{0,1}}\end{aligned}\end{equation}
+\begin{equation}\begin{aligned}\func{\mathbb{Z}_{+}}{\mathbb{Z}_{+}}\\ \linebreak
+&\hookrightarrow \func{\mathbb{Z}_{+}}{\mathcal{P}(\mathbb{Z}_{+})}\\ \linebreak
+&\sim\func{\mathbb{Z}_{+}}{\func{\mathbb{Z}_{+}}{\Set{0,1}}}\\ \linebreak
+&\sim\func{\mathbb{Z}_{+}\times\mathbb{Z}_{+}}{\Set{0,1}}\\ \linebreak
+&\sim\func{\mathbb{Z}_{+}}{\Set{0,1}}\end{aligned}\end{equation}
 ```
 
-```
+```tex
 # after
 \begin{equation}
     \begin{aligned}
@@ -88,12 +102,13 @@ A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0
 
 ![demo-format-exp][demo-format-exp]
 
-```
+```tex
 # before
-\begin{equation}\exp x\\=\sum_{n=1}^{\infty}\frac{x^n}{n!}\\=\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^{n}\end{equation}
+\begin{equation}\exp x\\ \linebreak
+=\sum_{n=1}^{\infty}\frac{x^n}{n!}\\=\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^{n}\end{equation}
 ```
 
-```
+```tex
 # after
 \begin{equation}
     \exp x \\
@@ -103,7 +118,7 @@ A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0
 ```
 
 - latexindent のデモ3でのお仕事 (既出内容は省略)
-  - aligned 環境におけるような `\\` による行変更を equation 環境でもやる
+  - aligned 環境でやった `\\` による改行を equation 環境でもやる
   - `\left( \right)` の開始直後と終了直前に space を1つだけ置く
 
 ## 前提・予備知識
@@ -129,24 +144,115 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 
 これは重要度順ではなく, 公式ドキュメントにおける出現位置順. 重要度は, 用途と latexindent 以外のツールの整備状況に依存するので一般に答えることは難しい(この中だと `oneSentencePerLine` を下に置く人が多いとは思う. 他は分からない).
 
-これらを押さえるだけで, 他設定はデフォルトのままでも, 執筆環境の快適度の桁が上がるはず. それぞれの概要を述べておこう.
+これらを押さえるだけで, 他設定はデフォルトのままでも, 執筆環境の快適度の桁が上がるはず. それぞれのラフな概要を述べておこう.
 
-`lookForAlignDelims` は, 環境内の delimiter (たとえば, aligned 環境における `&`) と DBS(double back slash) `\\` の位置関係を中心に, 環境内の他要素の format ルールを制御する. 自作環境も含め好きな環境を登録でき, 各環境ごとに delimiter の定義をユーザーが自由に正規表現で指定できる. つまり, 色々な環境内における format ルールを柔軟に設定できる. デモでは, delimiter=`&\command` として aligned 環境の要素を左揃えにしていた. ひとまずは, tabular や align 系のように `&` と `\\` を典型的に持つ環境に対する format ルールだと思っておけばよい.
+### `lookForAlignDelims`
+
+`lookForAlignDelims` は, 環境内の delimiter (たとえば, aligned 環境における `&`) と DBS(double back slash) `\\` の位置関係を中心に, 環境内の他要素の format ルールを制御する. 自作環境も含め好きな環境を登録でき, 各環境ごとに delimiter の定義をユーザーが自由に正規表現で指定できる. つまり, 色々な環境内における format ルールを柔軟に設定できる.
+
+たとえば,
+
+```tex
+\begin{aligned}
+    x &< y \\
+    &< \loooooooooooooongTerm \\
+    &< w
+\end{aligned}
+```
+
+というコードがあって, `&` や `\\` の位置を揃えたいとしよう. 仕上がりの姿は書き手の好みに応じていくつかパターンが有り得る. いくつか例を挙げる. `lookForAlignDelims` はこのようなパターンのうちのどれを採用するかを, 各環境ごとに定めるものだ.
+
+```tex
+# pattern 1
+\begin{aligned}
+    x &< y \\
+      &< \loooooooooooooongTerm \\
+      &< w
+\end{aligned}
+```
+
+```tex
+# pattern 2
+\begin{aligned}
+    x &< y                      \\
+      &< \loooooooooooooongTerm \\
+      &< w
+\end{aligned}
+```
+
+```tex
+# pattern 3
+\begin{aligned}
+    x &< y
+   \\ &< \loooooooooooooongTerm
+   \\ &< w
+\end{aligned}
+```
+
+デモでは, delimiter=`&\command` として aligned 環境の要素を左揃えにしていた. ひとまずは, tabular や align 系のように `&` と `\\` を典型的に持つ環境に対する format ルールだと思っておけばよい.
+
+### `oneSentencePerLine`
 
 `oneSentencePerLine` は, `ModifyLineBreak` というジャンルの中の1つ. 名前の通り, 自動で文章の終わりに改行を打ってくれる.
 一文の開始パターンの定義と, 終了パターンの定義を, 必要なら正規表現で指定することができる. 非インライン数式環境外のソースコードの可読性に資する.
 
-`Poly-switches` も `ModifyLineBreak` の中の1つ. この項目内に登録した任意の環境の, 開始直前・開始直後・終了直前・終了直後のそれぞれに改行または空行を入れるかどうかを制御する. `lookForAlignDelims` が環境"内部"の format ルールであるのに対して, `Poly-switches` は環境の"境界部"の format ルールを定める.
-また, `lookForAlignDelims` と連携して, DBS `\\` の位置指定(行頭 or 行末), その前後における改行有無なども指定できる. この連携により, 環境の format ルールをよりきめ細やかに制御できる. たとえば, デモにおいて, `\\` の後に改行を入れていたのはこの機能を使った.
+### `Poly-switches`
 
-`Replacements` は, latexindent の最も攻めた機能. ユーザーの書いた正規表現による置換を実行する. 特定の数式環境のレイアウトは `lookForAlignDelims` や `Poly-switches` で調整できるが, 数式それ自体に対する format や特定の環境外にある文字列に対する format は `Replacements` に頼ることになる. 公式ドキュメントには書いてないが, 正規表現だけでなく Perl コードを書くこともできる.
+`Poly-switches` も `ModifyLineBreak` の中の1つ. この項目内に登録した任意の環境の, 開始直前・開始直後・終了直前・終了直後のそれぞれに改行または空行を入れるかどうかを制御する. `lookForAlignDelims` が環境"内部"のレイアウトに関する format ルールであるのに対して, `Poly-switches` は環境の"境界部"の format ルールを定める.
+
+たとえば,
+
+```tex
+before env \begin{equation} 1+1=2. \end{equation} after env
+```
+
+というコードがあって, これに適当に改行・空行を差し込んで整形したいとしよう. 仕上がりの姿は書き手の好みに応じていくつかパターンが有り得る. いくつか例を挙げる. `Poly-switches` はこのようなパターンのうちのどれを採用するかを, 各環境ごとに定める.
+
+```tex
+# pattern 1
+before env
+\begin{equation} 1+1=2. \end{equation}
+after env
+```
+
+```tex
+# pattern 2
+before env
+\begin{equation}
+    1+1=2.
+\end{equation}
+after env
+```
+
+```tex
+# pattern 3
+before env
+\begin{equation}
+    1+1=2. \end{equation}
+after env
+```
+
+```tex
+# pattern 4
+before env
+
+\begin{equation}
+    1+1=2.
+\end{equation}
+after env
+```
+
+また, `Poly-switches` は `lookForAlignDelims` と連携して, DBS `\\` の位置指定(行頭 or 行末), その前後における改行有無なども指定できる. この連携により, 環境の format ルールをよりきめ細やかに制御できる. デモにおいて, `\\` の後に改行を入れていたのはこの機能を使った.
+
+### `Replacements`
+
+`Replacements` は, latexindent の最も aggressive な機能. ユーザーの書いた正規表現による置換を実行する. 特定の数式環境のレイアウトは `lookForAlignDelims` や `Poly-switches` で調整できるが, 数式それ自体に対する format や特定の環境外にある文字列に対する format は `Replacements` に頼ることになる. 公式ドキュメントには書いてないが, 正規表現だけでなく Perl コードを書くこともできる.
+
 デモの中の space を1つだけ挿入する系の操作は, ほとんど全てが `Replacements` によって実行されている.
-
-以下で, これらのざっくりとした各論と具体的な設定例を見る.
 
 ## 各論と設定例
 
-大雑把な説明と設定例を挙げていく.
+上で挙げた4つの項目の設定についての大雑把な説明と実践的な設定例を挙げていく.
 詳細な説明は[公式ドキュメント][doc latexindent]を参照のこと.
 
 ### lookForAlignDelims
@@ -159,7 +265,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 
 `defaultSettings.yaml` の該当部分を引用すると次のようになっている.
 
-```
+```yaml:defaultSettings.yaml
 # default
 lookForAlignDelims:
     tabular:
@@ -190,7 +296,7 @@ lookForAlignDelims:
 `longtable: 1` などは簡易設定であって, これがオンオフのみを指定している. オンのときはデフォルトに従う.
 `tabular` についてだけ詳細設定が例示されている. ちなみにこれがデフォルトの内容. このデフォルトを上書きしたいときだけ詳細設定を書けばよい.
 
-詳細設定の全てを理解する必要はなく, 一旦以下を理解すればよいと思う.
+詳細設定の全てを理解する必要はなく, 一旦以下を押さえればよい.
 
 |            Setting            |   Value    |                       Description                        |
 | :---------------------------: | :--------: | :------------------------------------------------------: |
@@ -202,17 +308,20 @@ lookForAlignDelims:
 |       `delimiterRegEx`        |   RegExp   |                     delimiter の定義                     |
 |   `delimiterJustification`    | left/right | 長さの異なる delimiter 達は<br>左/右揃えのどちらにするか |
 
-イメージしやすいように delimiter のことを `&` と書いたが, 実際の delimiter は `delimiterRegEx` においてユーザーが正規表現で指定する文字列のパターンであって, 必ずしも `&` とは限らない. たとえば, aligned 環境であれば `&` 単体よりも, `&=` や `&\simeq` などの, "`&`+二項関係記号"を delimiter として指定するのが自然だろう. なお, `delimiterRegEx: (?<!\\)(&)` と例示されているように, delimiter をキャプチャするための `()` は必須である. これを省くとエラーは起こさないが意味不明な挙動をするのでかなり厄介.
+イメージしやすいように delimiter のことを `&` と書いたが, 実際の delimiter は `delimiterRegEx` においてユーザーが正規表現で指定する文字列のパターンであって, 必ずしも `&` とは限らない. たとえば, aligned 環境であれば `&` 単体よりも, `&=` や `&\simeq` などの, "`&`+二項関係記号"を delimiter として指定するのが自然だろう.
+
+なお, `delimiterRegEx: (?<!\\)(&)` と例示されているように, delimiter をキャプチャするための `()` は必須である. これを忘れるとエラーは起こさないが意味不明な挙動をするのでかなり厄介.
 
 #### 設定例
 
 デモで使った `aligned` 環境と `equation` 環境の設定例を以下で紹介する.
 
-```
+```diff yaml
 lookForAlignDelims:
     aligned:
       delims: 1
-      alignDoubleBackSlash: 0   # Changed
++     alignDoubleBackSlash: 0
+-     alignDoubleBackSlash: 1
       spacesBeforeDoubleBackSlash: 1
       multiColumnGrouping: 0
       alignRowsWithoutMaxDelims: 1
@@ -221,24 +330,32 @@ lookForAlignDelims:
       justification: left
       alignFinalDoubleBackSlash: 0
       dontMeasure: 0
-      delimiterRegEx: (?<!\\)((?:&\\[a-zA-Z]+)|(?:&[\+\-\*=<>]?))   # e.g., &\command, &=   # Changed 
++     delimiterRegEx: (?<!\\)((?:&\\[a-zA-Z]+)|(?:&[\+\-\*=<>]?))   # e.g., &\command, &=
+-     delimiterRegEx: (?<!\\)(&)
       delimiterJustification: left
       lookForChildCodeBlocks: 1
       alignContentAfterDoubleBackSlash: 0
       spacesAfterDoubleBackSlash: 0
-    equation: # the same for equation*, gather and gather*
+    equation: # the same setting for equation*, gather and gather*
       delims: 1
-      alignDoubleBackSlash: 0   # Changed
++     alignDoubleBackSlash: 0
+-     alignDoubleBackSlash: 1
       spacesBeforeDoubleBackSlash: 1
-      delimiterRegEx: 0^ # no delimiters    # Changed
++     delimiterRegEx: 0^ # no delimiters
+-     delimiterRegEx: 0
 ```
 
 `aligned` 環境について. 二箇所変えた.
 まず `delimiterRegEx` の定義を, コメントに書いてある通り, 先述した"`&`+二項関係記号"のパターンを含むように delimiter として指定している. `&` と次のコマンドの間の spacing 次第では false-positive を生む点だけ注意.
 
+```tex
+&\alpha + ...   # false-positive
+& \alpha + ...  # true-negative
+```
+
 `alignDoubleBackSlash` を `0` にしているのは, 以下の例のように, ソースコード上の表記で長い式が来たときに, その式の末尾の位置に `\\` が固定されるのを嫌ったためだ. 長い式の表示がエディタによって折り返されると短い式の末尾に大量の不要なスペースが生まれることになる.
 
-```
+```tex
 \begin{equation}
     \begin{aligned}
         f(x) &= \loooooooooooooooooooooooongTerm \\
@@ -250,12 +367,12 @@ lookForAlignDelims:
 
 上に挙げた設定例の中で
 
-```
-equation: # the same for equation*, gather and gather*
+```yaml
+equation:
     delims: 1
-    alignDoubleBackSlash: 0   # Changed
+    alignDoubleBackSlash: 0
     spacesBeforeDoubleBackSlash: 1
-    delimiterRegEx: 0^ # no delimiters    # Changed
+    delimiterRegEx: 0^ # no delimiters
 ```
 
 として, delimiter のない環境をあえて書いているのは, `Poly-switches` の `DBSFinishesWithLineBreak` が, `lookForAlignDelims` に挙げられている項目しか参照しない仕様になっているためだ. それに見つけてもらうために, `equation` などを delimiter は持たないが `\\` は持ち得る環境として `lookForAlignDelims` の中に挙げている. つまり, ここに `equation` を書いた主たる目的は, この field に名前が挙がっているという事実が欲しかったから.
@@ -267,8 +384,7 @@ equation: # the same for equation*, gather and gather*
 その名の通り, 改行の操作を行う項目. latexindent に `-m` オプションを与えることで実行される.
 ただし, 例のごとく, デフォルトでは以下のように既存の改行は消さない設定になっているので, あまり仕事はしない.
 
-```
-# default
+```yaml:defaultSettings.yaml
 modifyLineBreaks:
     preserveBlankLines: 1
     condenseMultipleBlankLinesInto: 1
@@ -280,16 +396,11 @@ modifyLineBreaks:
 
 公式ドキュメントの該当箇所: [6.2. oneSentencePerLine: modifying line breaks for sentences][one-sentece-line].
 
-上で述べた概要を再掲.
->`oneSentencePerLine` は, `ModifyLineBreak` というジャンルの中の1つ. 名前の通り, 自動で文章の終わりに改行を打ってくれる.
->一文の開始パターンの定義と, 終了パターンの定義を, 必要なら正規表現で指定することができる. 非インライン数式環境外のソースコードの可読性に資する.
-
 #### 設定概要
 
 `defaultSettings.yaml` の該当部分を引用すると次のようになっている.
 
-```
-# default
+```yaml:defaultSettings.yaml
 modifyLineBreaks:
     oneSentencePerLine:
         manipulateSentences: 0              # 0/1
@@ -330,10 +441,10 @@ modifyLineBreaks:
 
 #### 設定例
 
-文章の癖に強く依存する項目なので, 人のものを真似るというより, 自分に合わせて育てていくべきだと思う.
+コード以外の文章に強く依存する項目なので, 人のものを真似るというより, 用途に合わせて育てていくべき項目だと思う.
 以下は, 数学等で `!` を階乗の意味で使うことを念頭に置いたもの.
 
-```
+```diff yaml
 modifyLineBreaks:
     oneSentencePerLine:
         manipulateSentences: 1              # 0/1
@@ -342,13 +453,16 @@ modifyLineBreaks:
         sentencesBeginWith:            
             A-Z: 1                          # 0/1
             a-z: 0                          # 0/1
-            other: ^\\\(                    # regex # Changed
++           other: 0                        # regex
+-           other: ^\\\(                    # regex
         sentencesEndWith:
             basicFullStop: 0                # 0/1
-            betterFullStop: 1               # 0/1   # Changed
-            exclamationMark: 0              # 0/1
+            betterFullStop: 1               # 0/1
++           exclamationMark: 0              # 0/1
+-           exclamationMark: 1              # 0/1
             questionMark: 1                 # 0/1
-            other: \\linebreak              # regex # Changed
++           other: \\linebreak              # regex
+-           other: 0                        # regex
 ```
 
 この設定下では, 強調等の意味で `!` を文末に使いたいときは, `!\\linebreak` と書くことになる.
@@ -356,27 +470,225 @@ modifyLineBreaks:
 
 ### Poly-switches
 
-```
-# default
+公式ドキュメントの該当箇所: [6.3. Poly-switches][poly-switch].
+
+#### 設定概要
+
+例のごとく, `defaultSettings.yaml` では, 何もしない設定になっている.
+
+```yaml:defaultSettings.yaml
 modifyLineBreaks:
         .
         .
         .
     environments:
-        BeginStartsOnOwnLine: 0
-        BodyStartsOnOwnLine: 0
-        EndStartsOnOwnLine: 0
-        EndFinishesWithLineBreak: 0
+        BeginStartsOnOwnLine: 0             # -1,0,1,2,3,4
+        BodyStartsOnOwnLine: 0              # -1,0,1,2,3,4
+        EndStartsOnOwnLine: 0               # -1,0,1,2,3,4
+        EndFinishesWithLineBreak: 0         # -1,0,1,2,3,4
         equation*:
-            BeginStartsOnOwnLine: 0
-            BodyStartsOnOwnLine: 0
-            EndStartsOnOwnLine: 0
-            EndFinishesWithLineBreak: 0
+            BeginStartsOnOwnLine: 0         # -1,0,1,2,3,4
+            BodyStartsOnOwnLine: 0          # -1,0,1,2,3,4
+            EndStartsOnOwnLine: 0           # -1,0,1,2,3,4
+            EndFinishesWithLineBreak: 0     # -1,0,1,2,3,4
 ```
+
+##### Poly-switches for Environments
+
+`environments` とは, `\begin{env} \end{env}` のような形式で書かれる `env` 全てを指す.
+ここでの `equation*` は単なる例示で, `environments` で定めた一般則を, このような形で個別に上書きできることを示唆する.
+
+以下, いくつかの点について大雑把な説明を行うが, 具体的な挙動例は公式ドキュメントに豊富にあるので, 必要に応じてそちらを参照されたい.
+
+まず, 数字の意味について大雑把な解説をしておく. `BeginStartsOnOwnLine` を例に挙げる. 他3項目についても同様なので, 1項目について理解すれば十分. 以下のような状況を考える.
+
+```tex:example.tex
+before env \begin{env} body \end{env} after env
+```
+
+このとき,
+
+- `BeginStartsOnOwnLine:`
+  - `0` = off → 何もしない.
+  - `1` = add → `\begin{env}` の手前に改行を入れる(既にあるなら何もしない).
+  - `2` = comment then add → 改行を行う際に `before env` の末尾に `%` を打つという仕様を足した `1`.
+  - `3` = add then blank line → `\begin{env}` の手前に**空**行を入れる(既に**改**行があるなら何もしない).
+  - `4` = add blank line → `\begin{env}` の手前に**空**行を入れる(既に**空**行があるなら何もしない).
+  - `-1` = remove → `\begin{env}` の前にある改行・空行を削除する.
+
+`2`, `3` は `before env` の末尾に改行があるか否かで挙動が変わるという意味で, 繊細な所がある. より強制力の強い他の番号の使用を勧めたい.
+
+##### Poly-switches for double back slash (DBS)
+
+実は, `environments` に対しては, 上の4項目に加えて `DBSStartsOnOwnLine` と `DBSFinishesWithLineBreak` という項目もある. これはなぜか `defaultSettings.yaml` には書かれていないようだが, 公式ドキュメントには記載がある. これらは `0` or `1` or `2` の値を取り, 意味は上述のものと同じ.
+
+これらの DBS 系の項目を特定の環境 `env` に効かせるためには, `lookForAlignDelims` に `env` が登録されていなければならない.
+たとえば, `equation` 環境に対して `DBSFinishesWithLineBreak` を設定したいなら, `lookForAlignDelims` に `equation` 環境を明記する必要がある.
+なぜなら, `equation` 環境は元々 `lookForAlignDelims` の中にはいないからだ.
+
+#### 設定例
+
+引き続き,
+
+```tex:example.tex
+before env \begin{env} body \end{env} after env
+```
+
+を例として用いる.
+
+これに
+
+```yaml:setting1.yaml
+equation:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 1
+```
+
+を当てると
+
+```tex:output1.tex
+before env
+\begin{env}
+    body
+\end{env}
+after env
+```
+
+のような形になる. `body` がどれくらいインデントされるかは, `defaultIndent:` の値などに依存する(これはまた別の場所で定義されている).
+以下, `settingN.yaml`, `outputN.tex` などが対応する設定と結果の組であるとして, いくつか例を挙げていく.
+
+```yaml:setting2
+equation:
+    BeginStartsOnOwnLine: 4
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 4
+```
+
+```tex:output2.tex
+before env
+
+\begin{env}
+    body
+\end{env}
+
+after env
+```
+
+このとき, `after env` は新しいパラグラフになることに注意. `before env` の後の空行はこのような副作用を持たない.
+
+```yaml:setting3
+equation:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 4
+    EndStartsOnOwnLine: 4
+    EndFinishesWithLineBreak: 1
+```
+
+```tex:output3.tex
+before env
+\begin{env}
+
+    body
+    
+\end{env}
+after env
+```
+
+`equation` 環境などでは, この空行はコンパイラに怒られるはず.
+
+```yaml:setting4
+equation:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: -1
+    EndFinishesWithLineBreak: 1
+```
+
+```tex:output4.tex
+before env
+\begin{env}
+    body \end{env}
+after env
+```
+
+DBS の例も挙げておく.
+
+```tex:dbs-example.tex
+before env \begin{env} x\\=y\\=z \end{env} after env
+```
+
+```yaml:dbs-setting5
+equation:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 1
+    DBSStartsOnOwnLine: 0
+    DBSFinishesWithLineBreak: 1
+```
+
+```tex:dbs-output5.tex
+before env
+\begin{env}
+    x \\
+    = y \\
+    = z
+\end{env}
+after env
+```
+
+```yaml:dbs-setting6
+equation:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 0
+    DBSStartsOnOwnLine: 1
+    DBSFinishesWithLineBreak: 1
+```
+
+```tex:dbs-output6.tex
+before env
+\begin{env}
+    x
+    \\ = y
+    \\ = z
+\end{env}
+after env
+```
+
+最後に, デモで使った環境の設定例を書く. 全項目がデフォルトから変更されている.
+
+```yaml:.latexindent.yaml
+environments:
+        BeginStartsOnOwnLine: 1             # -1,0,1,2,3,4
+        BodyStartsOnOwnLine: 1              # -1,0,1,2,3,4
+        EndStartsOnOwnLine: 1               # -1,0,1,2,3,4
+        EndFinishesWithLineBreak: 1         # -1,0,1,2,3,4
+        DBSStartsOnOwnLine: 0               # 0,1,2
+        DBSFinishesWithLineBreak: 1         # 0,1,2
+        document:
+            BodyStartsOnOwnLine: 4          # -1,0,1,2,3,4
+            EndStartsOnOwnLine: 4           # -1,0,1,2,3,4
+        equation:                          
+            BeginStartsOnOwnLine: 4         # -1,0,1,2,3,4
+            BodyStartsOnOwnLine: 1          # -1,0,1,2,3,4
+            EndStartsOnOwnLine: 1           # -1,0,1,2,3,4
+            EndFinishesWithLineBreak: 1     # -1,0,1,2,3,4
+```
+
+2つの `DBS...` のどちらを `1` にするかは趣味の問題だろう.
+他の4項目は, 全て `1` にするのが基本だと思う.
+私は, `equation` と `gather` 環境についてだけは, `BeginStartsOnOwnLine: 4` として, 同環境とその前の文章を視覚的に見分けやすいようにしている. 同じ理由で `EndFinishesWithLineBreak: 4` としたいが, 上述の副作用を嫌って不採用としている.
 
 ### Replacements
 
-```
+公式ドキュメントの該当箇所: [7. The -r, -rv and -rr switches][replacements].
+
+```yaml
 # example from official doc 
 replacements:
   -
@@ -384,6 +696,10 @@ replacements:
     lookForThis: 1
     when: after
 ```
+
+#### 設定概要
+
+#### 設定例
 
 ### Further Readings
 
@@ -402,3 +718,5 @@ replacements:
 [align-at-delim]:https://latexindentpl.readthedocs.io/en/latest/sec-default-user-local.html#aligning-at-delimiters
 [one-sentece-line]:https://latexindentpl.readthedocs.io/en/latest/sec-the-m-switch.html#onesentenceperline-modifying-line-breaks-for-sentences
 [modify-line-break]:https://latexindentpl.readthedocs.io/en/latest/sec-the-m-switch.html#
+[poly-switch]:https://latexindentpl.readthedocs.io/en/latest/sec-the-m-switch.html#poly-switches
+[replacements]:https://latexindentpl.readthedocs.io/en/latest/sec-replacements.html#the-r-rv-and-rr-switches
