@@ -32,16 +32,14 @@ published: true
 
 見やすさのために所々に改行を入れた. その箇所は `\linebreak` で明記してある.
 
-```tex
-# before
+```tex:demo1-before.tex
 Let \(U\) be an open subset of\(\mathbb{R}    \).\linebreak
 A function \(f:U \to \mathbb{R}\)is said to be \textit{continuous at}\( x_0\)\linebreak
 if for any\(\epsilon>0 \)there is\( \delta>0\)\linebreak
 such that\begin{equation}\abs{x-x_0}\implies\abs{f(x)-f(x_0)}<\epsilon.\end{equation}
 ```
 
-```tex
-# after
+```tex:demo1-after.tex
 Let \( U \) be an open subset of \( \mathbb{R} \).
 A function \( f:U \to \mathbb{R} \) is said to be \textit{continuous at} \( x_{0} \)\linebreak
 if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
@@ -51,21 +49,20 @@ if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 \end{equation}
 ```
 
-- latexindent のデモ1でのお仕事
-  - ピリオド `.` の後に改行を置く
-  - 数式環境 `\begin \end {equation}` を独立行に移し, 中身にインデントを与える
-  - インライン数式環境 `\( \)` の開始直後と終了直前に space を1つだけ置く
-  - インライン数式環境 `\( \)` とその前後の文章の間に space を1つだけ置く
-  - 数式環境内の(不)等号・二項演算子の周りに space を1つだけ置く
-  - 隣接する `\command` の間に space を1つだけ置く
-  - 数式環境内の subscript に braces `{}` を補完する: `x_0`→`x_{0}`
+- latexindent のデモ1でのお仕事 (対応する設定項目)
+  - ピリオド `.` の後に改行を置く (`oneSentencePerLine`)
+  - 数式環境 `\begin \end {equation}` を独立行に移し, 中身にインデントを与える (`Poly-switches`)
+  - インライン数式環境 `\( \)` の開始直後と終了直前に space を1つだけ置く (`Replacements`)
+  - インライン数式環境 `\( \)` とその前後の文章の間に space を1つだけ置く (`Replacements`)
+  - 数式環境内の(不)等号・二項演算子の周りに space を1つだけ置く (`Replacements`)
+  - 隣接する `\command` の間に space を1つだけ置く (`Replacements`)
+  - 数式環境内の subscript に braces `{}` を補完する: `x_0`→`x_{0}` (`Replacements`)
 
 ### デモ2
 
 ![demo-format-card][demo-format-card]
 
-```tex
-# before
+```tex:demo2-before.tex
 \begin{equation}\begin{aligned}\func{\mathbb{Z}_{+}}{\mathbb{Z}_{+}}\\ \linebreak
 &\hookrightarrow \func{\mathbb{Z}_{+}}{\mathcal{P}(\mathbb{Z}_{+})}\\ \linebreak
 &\sim\func{\mathbb{Z}_{+}}{\func{\mathbb{Z}_{+}}{\Set{0,1}}}\\ \linebreak
@@ -73,8 +70,7 @@ if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 &\sim\func{\mathbb{Z}_{+}}{\Set{0,1}}\end{aligned}\end{equation}
 ```
 
-```tex
-# after
+```tex:demo2-after.tex
 \begin{equation}
     \begin{aligned}
         \func{\mathbb{Z}_{+}}{\mathbb{Z}_{+}} \\
@@ -87,24 +83,22 @@ if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 ```
 
 - latexindent のデモ2でのお仕事 (既出内容は省略)
-  - 数式環境 `\begin \end {equation}` と `\begin \end {aligned}` を独立行に移し, ネストしたインデントを与える
-  - aligned 環境において, `\\` の位置でソースコードを改行する
-  - aligned 環境において, `&\command` を一纏まりの区切り文字と認識して, それらを左揃えにする
-  - 区切り文字の後に続く文字列の開始地点を左揃えにする
-  - (おまけ) `\\` の位置は揃えない
+  - 数式環境 `\begin \end {equation}` と `\begin \end {aligned}` を独立行に移し, ネストしたインデントを与える (`Poly-switches`)
+  - aligned 環境において, `\\` の位置でソースコードを改行する (`lookForAlignDelims`, `Poly-switches`)
+  - aligned 環境において, `&\command` を一纏まりの区切り文字と認識して, それらを左揃えにする (`lookForAlignDelims`)
+  - 区切り文字の後に続く文字列の開始地点を左揃えにする (`lookForAlignDelims`)
+  - `\\` の位置は揃えない (`lookForAlignDelims`)
 
 ### デモ3
 
 ![demo-format-exp][demo-format-exp]
 
-```tex
-# before
+```tex:demo3-before.tex
 \begin{equation}\exp x\\ \linebreak
 =\sum_{n=1}^{\infty}\frac{x^n}{n!}\\=\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^{n}\end{equation}
 ```
 
-```tex
-# after
+```tex:demo3-after.tex
 \begin{equation}
     \exp x \\
     = \sum_{n = 1}^{\infty} \frac{x^{n}}{n!} \\
@@ -113,8 +107,8 @@ if for any \( \epsilon > 0 \) there is \( \delta > 0 \) such that
 ```
 
 - latexindent のデモ3でのお仕事 (既出内容は省略)
-  - aligned 環境でやった `\\` による改行を equation 環境でもやる
-  - `\left( \right)` の開始直後と終了直前に space を1つだけ置く
+  - aligned 環境でやった `\\` による改行を equation 環境でもやる (`lookForAlignDelims`, `Poly-switches`)
+  - `\left( \right)` の開始直後と終了直前に space を1つだけ置く (`Replacements`)
 
 ## 前提・予備知識
 
@@ -141,7 +135,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 
 これは重要度順ではなく, 公式ドキュメントにおける出現位置順. 重要度は, 用途と latexindent 以外のツールの整備状況に依存するので一般に答えることは難しい(この中だと `oneSentencePerLine` を下に置く人が多いとは思う. 他は分からない).
 
-これらを押さえるだけで, 他設定はデフォルトのままでも, 執筆環境の快適度の桁が上がるはず. それぞれのラフな概要を述べておこう.
+これらを押さえるだけで, 他設定はデフォルトのままでも, 執筆環境の快適度の桁が上がるはず. それぞれがどのような役割を担うのか, ラフに述べておこう.
 
 ### `lookForAlignDelims`
 
@@ -149,7 +143,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 
 たとえば,
 
-```tex
+```tex:input.tex
 \begin{aligned}
     x &< y \\
     &< \loooooooooooooongTerm \\
@@ -159,8 +153,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 
 というコードがあって, `&` や `\\` の位置を揃えたいとしよう. 仕上がりの姿は書き手の好みに応じていくつかパターンが有り得る. いくつか例を挙げる. `lookForAlignDelims` はこのようなパターンのうちのどれを採用するかを, 各環境ごとに定めるものだ.
 
-```tex
-# pattern 1
+```tex:pattern1.tex
 \begin{aligned}
     x &< y \\
       &< \loooooooooooooongTerm \\
@@ -168,8 +161,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 \end{aligned}
 ```
 
-```tex
-# pattern 2
+```tex:pattern2.tex
 \begin{aligned}
     x &< y                      \\
       &< \loooooooooooooongTerm \\
@@ -177,8 +169,7 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 \end{aligned}
 ```
 
-```tex
-# pattern 3
+```tex:pattern3.tex
 \begin{aligned}
     x &< y
    \\ &< \loooooooooooooongTerm
@@ -186,34 +177,33 @@ latexindent 自体の予備知識としては, [latexindent の使い方][How to
 \end{aligned}
 ```
 
-デモでは, delimiter=`&\command` として aligned 環境の要素を左揃えにしていた. ひとまずは, tabular や align 系のように `&` と `\\` を典型的に持つ環境に対する format ルールだと思っておけばよい.
+デモでは, delimiter=`&\command` として aligned 環境の要素を左揃えにしていた. ひとまず, `lookForAlignDelims` は, tabular や align 系のように `&` と `\\` を典型的に持つ環境に対する format ルールだと思っておけばよい.
 
-### `oneSentencePerLine`
+### `oneSentencePerL    ine`
 
 `oneSentencePerLine` は, `ModifyLineBreak` というジャンルの中の1つ. 名前の通り, 自動で文章の終わりに改行を打ってくれる.
 一文の開始パターンの定義と, 終了パターンの定義を, 必要なら正規表現で指定することができる. 非インライン数式環境外のソースコードの可読性に資する.
 
 ### `Poly-switches`
 
-`Poly-switches` も `ModifyLineBreak` の中の1つ. この項目内に登録した任意の環境の, 開始直前・開始直後・終了直前・終了直後のそれぞれに改行または空行を入れるかどうかを制御する. `lookForAlignDelims` が環境"内部"のレイアウトに関する format ルールであるのに対して, `Poly-switches` は環境の"境界部"の format ルールを定める.
+厳密には, `Poly-switches` という名の設定項目は存在せず, `ModifyLineBreak` の中に poly-switches を持つ設定項目があるだけである. しかし, 便利なので, そのような設定項目のことを総称して `Poly-switches` と呼んでしまうことにする(というか既にそうしていた).
+この項目内に登録した任意の環境の, 開始直前・開始直後・終了直前・終了直後のそれぞれに改行または空行を入れるかどうかを制御する. `lookForAlignDelims` が環境"内部"のレイアウトに関する format ルールであるのに対して, `Poly-switches` は環境の"境界部"の format ルールを定める.
 
 たとえば,
 
-```tex
+```tex:input.tex
 before env \begin{equation} 1+1=2. \end{equation} after env
 ```
 
 というコードがあって, これに適当に改行・空行を差し込んで整形したいとしよう. 仕上がりの姿は書き手の好みに応じていくつかパターンが有り得る. いくつか例を挙げる. `Poly-switches` はこのようなパターンのうちのどれを採用するかを, 各環境ごとに定める.
 
-```tex
-# pattern 1
+```tex:pattern1.tex
 before env
 \begin{equation} 1+1=2. \end{equation}
 after env
 ```
 
-```tex
-# pattern 2
+```tex:pattern2.tex
 before env
 \begin{equation}
     1+1=2.
@@ -221,16 +211,14 @@ before env
 after env
 ```
 
-```tex
-# pattern 3
+```tex:pattern3.tex
 before env
 \begin{equation}
     1+1=2. \end{equation}
 after env
 ```
 
-```tex
-# pattern 4
+```tex:pattern4.tex
 before env
 
 \begin{equation}
@@ -313,7 +301,7 @@ lookForAlignDelims:
 
 デモで使った `aligned` 環境と `equation` 環境の設定例を以下で紹介する.
 
-```diff yaml
+```diff yaml:.latexindent.yaml
 lookForAlignDelims:
     aligned:
       delims: 1
@@ -345,14 +333,14 @@ lookForAlignDelims:
 `aligned` 環境について. 二箇所変えた.
 まず `delimiterRegEx` の定義を, コメントに書いてある通り, 先述した"`&`+二項関係記号"のパターンを含むように delimiter として指定している. `&` と次のコマンドの間の spacing 次第では false-positive を生む点だけ注意.
 
-```tex
+```tex:example NG & OK
 &\alpha + ...   # false-positive
 & \alpha + ...  # true-negative
 ```
 
 `alignDoubleBackSlash` を `0` にしているのは, 以下の例のように, ソースコード上の表記で長い式が来たときに, その式の末尾の位置に `\\` が固定されるのを嫌ったためだ. 長い式の表示がエディタによって折り返されると短い式の末尾に大量の不要なスペースが生まれることになる.
 
-```tex
+```tex: aligned with long term
 \begin{equation}
     \begin{aligned}
         f(x) &= \loooooooooooooooooooooooongTerm \\
@@ -364,7 +352,7 @@ lookForAlignDelims:
 
 上に挙げた設定例の中で
 
-```yaml
+```yaml:.latexindent.yaml
 equation:
     delims: 1
     alignDoubleBackSlash: 0
@@ -441,7 +429,7 @@ modifyLineBreaks:
 コード以外の文章に強く依存する項目なので, 人のものを真似るというより, 用途に合わせて育てていくべき項目だと思う.
 以下は, 数学等で `!` を階乗の意味で使うことを念頭に置いたもの.
 
-```diff yaml
+```diff yaml:.latexindent.yaml
 modifyLineBreaks:
     oneSentencePerLine:
         manipulateSentences: 1              # 0/1
@@ -705,7 +693,7 @@ replacements:
 ここで取り上げるのは, 正規表現を用いた文字列置換. 以下の形式で書く.
 正規表現のワンライナーでもよし, 正規表現で文字列を受けた後に Perl コードを書いてもよし.
 
-```yaml
+```yaml:.latexindent.yaml
 replacements:
   -
     substitution: s/\h+/ /sg    # Regular Expression with replacement
@@ -754,7 +742,7 @@ Perl の文法全てがサポートされているわけではないらしい. �
 
 ##### `document` 環境内に作用するもの
 
-```yaml
+```yaml:.latexindent.yaml
 substitution: |-
     s/(?<=\\begin\{document\})(.*?)(?=\\end\{document\})/
     my $body = $1;
@@ -777,7 +765,7 @@ when: before
 
 ##### 数式環境外の文字列に作用するもの
 
-```yaml
+```yaml:.latexindent.yaml
 substitution: |- # text env is intended to be document env minus math env
     s/(?<=\\begin\{document\}|\\\)|\\end\{equation\}|\\end\{equation\*\}|\\end\{gather\}|\\end\{gather\*\})(.*?)(?=\\end\{document\}|\\\(|\\begin\{equation\}|\\begin\{equation\*\}|\\begin\{gather\}|\\begin\{gather\*\})/
     my $body = $1;
@@ -793,7 +781,7 @@ when: before
 
 #### インライン数式環境に作用するもの
 
-```yaml
+```yaml:.latexindent.yaml
 substitution: |-
     s/(?<=\\\()\h*(.*?)\h*(?=\\\))/
     my $body = $1;
@@ -816,7 +804,7 @@ when: after
 
 ##### 行別数式環境に作用するもの
 
-```yaml
+```yaml:.latexindent.yaml
 substitution: |-
     s/(\\begin\{(?:equation|gather)\*?\}[\h\n]*)(?<!\n)(.*?)(?!\h)([\h\n]*\\end\{(?:equation|gather)\*?\}[\h\n]*)/
     my ($begin, $body, $end) = ($1, $2, $3);
@@ -863,7 +851,7 @@ when: before
 
 以下のように複数環境がネストされている場合が有り得るので, コアにある `1+1=2` を抜き出す前処理(~`while`文まで)がある.
 
-```tex
+```tex:example-nested-envs
 \begin{equation}
     \begin{aligned}
         1+1=2
