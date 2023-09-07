@@ -3,12 +3,12 @@ summary: ""
 topics: ["latex"]
 published: false
 price: 0 # 有料の場合200〜5000
-# 本に含めるチャプターを順番に並べましょう
 chapters:
-  - ch0_intro.md
-  - ch1_readability.md
-  - ch2_good_commands.md
-  - ch3_process.md
-  - ch4_abbreviation.md
-  - ch5_criteria.md
-  - ch6_conclusion.md
+  - intro.md
+  - readability.md
+  - good_commands.md
+  - process.md
+  - extended_commands.md
+  - misc_commands.md
+  - criteria.md
+  - conclusion.md
